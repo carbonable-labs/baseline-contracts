@@ -4,36 +4,22 @@
 // FOREST IN 2000. (SOURCE FRA 2000)
 
 #[derive(Copy, Drop, PartialEq)]
-struct Table3A14Data {
-    volume: u32,
-    biomass: u32,
-    source: felt252,
-    climate_domain: felt252,
-    ecological_zone: felt252,
-    AGB_old: u32,
-    AGB_new: u32,
-    AGB_old_growth: u32,
-    AGB_new_growth: u32
+pub struct Table3A14Data {
+    pub volume: u32,
+    pub biomass: u32,
+    pub source: felt252,
+    pub climate_domain: felt252,
+    pub ecological_zone: felt252,
+    pub AGB_old: u32,
+    pub AGB_new: u32,
+    pub AGB_old_growth: u32,
+    pub AGB_new_growth: u32
 }
 
 type selfName = felt252;
 
-fn TABLE3A11(self: selfName) -> Table3A14Data {
+pub fn TABLE3A11(self: selfName) -> Table3A14Data {
     self.into()
-}
-
-fn averageAGB(country: felt252, duration: u32, forest_type: felt252) -> u32 {
-    let data: Table3A14Data = TABLE3A11(country);
-
-    if forest_type == 'old' {
-        // (biomass + (AGB_old + AGB_old_growth * duration))/2
-        return (data.biomass + (data.AGB_old + data.AGB_old_growth * duration)) / 2;
-    } else if forest_type == 'new' {
-        // (biomass + (AGB_new + AGB_new_growth * duration))/2
-        return (data.biomass + (data.AGB_new + data.AGB_new_growth * duration)) / 2;
-    } else {
-        0
-    }
 }
 
 impl selfInto3A14Impl of Into<selfName, Table3A14Data> {
@@ -2595,29 +2581,5 @@ impl selfInto3A14Impl of Into<selfName, Table3A14Data> {
                 AGB_new_growth: 0
             }
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::{Table3A14Data, TABLE3A11, averageAGB};
-
-    #[test]
-    fn test_table3a14() {
-        let data = TABLE3A11('Austria');
-        assert_eq!(data.volume, 0);
-        assert_eq!(data.biomass, 250);
-        assert_eq!(data.source, '');
-        assert_eq!(data.climate_domain, 'temperate');
-        assert_eq!(data.ecological_zone, 'temperate oceanic forests');
-        assert_eq!(data.AGB_old, 180);
-        assert_eq!(data.AGB_new, 160);
-        assert_eq!(data.AGB_old_growth, 5);
-        assert_eq!(data.AGB_new_growth, 5);
-    }
-
-    #[test]
-    fn test_averageAGB() {
-        assert_eq!(averageAGB('France', 20, 'new'), 136);
     }
 }
